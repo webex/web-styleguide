@@ -1,0 +1,34 @@
+{
+  "name": "@ciscospark/web-styleguide",
+  "version": "2.0.0",
+  "description": "A somewhat reasonable approach to developing for the web.",
+  "scripts": {
+    "lint": "markdownlint --config linters/.markdownlint.json *.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ciscospark/web-styleguide.git"
+  },
+  "keywords": [
+    "style guide",
+    "lint",
+    "ciscospark",
+    "es6",
+    "css",
+    "es2015",
+    "react",
+    "jsx"
+  ],
+  "contributors": [
+    "Adam Weeks <adweeks@cisco.com>",
+    "Bernie Zang <nzang@cisco.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ciscospark/web-styleguide/issues"
+  },
+  "homepage": "https://github.com/ciscospark/web-styleguide",
+  "devDependencies": {
+    "markdownlint-cli": "^0.3.1"
+  }
+}
