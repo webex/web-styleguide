@@ -1,234 +1,206 @@
-# Cisco Spark CSS Style Guide
+# Cisco Spark CSS Styleguide
 
-*A mostly reasonable approach to CSS
+*A mostly reasonable approach to CSS adapted from the [Airbnb CSS styleguide](https://github.com/airbnb/css)*
 
 ## Table of Contents
 
-1. [Naming](#naming)
-1. [Ordering](#ordering)
-1. [Nesting](#nesting)
-1. [Inline](#inline)
-1. [Themes](#themes)
+1. [Terminology](#terminology)
+    - [Rule Declaration](#rule-declaration)
+    - [Selectors](#selectors)
+    - [Properties](#properties)
+1. [CSS](#css)
+    - [Formatting](#formatting)
+    - [Comments](#comments)
+    - [OOCSS and BEM](#oocss-and-bem)
+    - [ID Selectors](#id-selectors)
+    - [JavaScript hooks](#javascript-hooks)
+    - [Border](#border)
+1. [CSS modules](#css-modules)
+    - [Syntax](#syntax)
+    - [Variables](#variables)
+    - [Mixins](#mixins)
 
-## Naming
+## Terminology
 
-  - Use camelCase for object keys (i.e. "selectors").
+### Rule declaration
 
-    > Why? We access these keys as properties on the `styles` object in the component, so it is most convenient to use camelCase.
+A “rule declaration” is the name given to a selector (or a group of selectors) with an accompanying group of properties. Here's an example:
 
-    ```js
-    // bad
-    {
-      'bermuda-triangle': {
-        display: 'none',
-      },
-    }
+```css
+.listing {
+  font-size: 18px;
+  line-height: 1.2;
+}
+```
 
-    // good
-    {
-      bermudaTriangle: {
-        display: 'none',
-      },
-    }
-    ```
+### Selectors
 
-  - Use an underscore for modifiers to other styles.
+In a rule declaration, “selectors” are the bits that determine which elements in the DOM tree will be styled by the defined properties. Selectors can match HTML elements, as well as an element's class, ID, or any of its attributes. Here are some examples of selectors:
 
-    > Why? Similar to BEM, this naming convention makes it clear that the styles are intended to modify the element preceded by the underscore. Underscores do not need to be quoted, so they are preferred over other characters, such as dashes.
+```css
+.my-element-class {
+  /* ... */
+}
 
-    ```js
-    // bad
-    {
-      bruceBanner: {
-        color: 'pink',
-        transition: 'color 10s',
-      },
+[aria-hidden] {
+  /* ... */
+}
+```
 
-      bruceBannerTheHulk: {
-        color: 'green',
-      },
-    }
+### Properties
 
-    // good
-    {
-      bruceBanner: {
-        color: 'pink',
-        transition: 'color 10s',
-      },
+Finally, properties are what give the selected elements of a rule declaration their style. Properties are key-value pairs, and a rule declaration can contain one or more property declarations. Property declarations look like this:
 
-      bruceBanner_theHulk: {
-        color: 'green',
-      },
-    }
-    ```
+```css
+/* some selector */ {
+  background: #f1f1f1;
+  color: #333;
+}
+```
 
-  - Use `selectorName_fallback` for sets of fallback styles.
+**[⬆ back to top](#table-of-contents)**
 
-    > Why? Similar to modifiers, keeping the naming consistent helps reveal the relationship of these styles to the styles that override them in more adequate browsers.
+## CSS
 
-    ```js
-    // bad
-    {
-      muscles: {
-        display: 'flex',
-      },
+### Formatting
 
-      muscles_sadBears: {
-        width: '100%',
-      },
-    }
+- Use soft tabs (2 spaces) for indentation
+- Prefer dashes over camelCasing in class names.
+- Do not use ID selectors
+- When using multiple selectors in a rule declaration, give each selector its own line.
+- Put a space before the opening brace `{` in rule declarations
+- In properties, put a space after, but not before, the `:` character.
+- Put closing braces `}` of rule declarations on a new line
+- Put blank lines between rule declarations
 
-    // good
-    {
-      muscles: {
-        display: 'flex',
-      },
+**Bad**
 
-      muscles_fallback: {
-        width: '100%',
-      },
-    }
-    ```
+```css
+.avatar{
+    border-radius:50%;
+    border:2px solid white; }
+.no, .nope, .not_good {
+    // ...
+}
+#lol-no {
+  // ...
+}
+```
 
-  - Use a separate selector for sets of fallback styles.
+**Good**
 
-    > Why? Keeping fallback styles contained in a separate object clarifies their purpose, which improves readability.
+```css
+.avatar {
+  border-radius: 50%;
+  border: 2px solid white;
+}
 
-    ```js
-    // bad
-    {
-      muscles: {
-        display: 'flex',
-      },
+.one,
+.selector,
+.per-line {
+  // ...
+}
+```
 
-      left: {
-        flexGrow: 1,
-        display: 'inline-block',
-      },
+### Comments
 
-      right: {
-        display: 'inline-block',
-      },
-    }
+- Prefer line comments (`//` in Sass-land) to block comments.
+- Prefer comments on their own line. Avoid end-of-line comments.
+- Write detailed comments for code that isn't self-documenting:
+  - Uses of z-index
+  - Compatibility or browser-specific hacks
 
-    // good
-    {
-      muscles: {
-        display: 'flex',
-      },
+### OOCSS and BEM
 
-      left: {
-        flexGrow: 1,
-      },
+We encourage some combination of OOCSS and BEM for these reasons:
 
-      left_fallback: {
-        display: 'inline-block',
-      },
+  - It helps create clear, strict relationships between CSS and HTML
+  - It helps us create reusable, composable components
+  - It allows for less nesting and lower specificity
+  - It helps in building scalable stylesheets
 
-      right_fallback: {
-        display: 'inline-block',
-      },
-    }
-    ```
+**OOCSS**, or “Object Oriented CSS”, is an approach for writing CSS that encourages you to think about your stylesheets as a collection of “objects”: reusable, repeatable snippets that can be used independently throughout a website.
 
-  - Use device-agnostic names (e.g. "small", "medium", and "large") to name media query breakpoints.
+  - Nicole Sullivan's [OOCSS wiki](https://github.com/stubbornella/oocss/wiki)
+  - Smashing Magazine's [Introduction to OOCSS](http://www.smashingmagazine.com/2011/12/12/an-introduction-to-object-oriented-css-oocss/)
 
-    > Why? Commonly used names like "phone", "tablet", and "desktop" do not match the characteristics of the devices in the real world. Using these names sets the wrong expectations.
+**BEM**, or “Block-Element-Modifier”, is a _naming convention_ for classes in HTML and CSS. It was originally developed by Yandex with large codebases and scalability in mind, and can serve as a solid set of guidelines for implementing OOCSS.
 
-    ```js
-    // bad
-    const breakpoints = {
-      mobile: '@media (max-width: 639px)',
-      tablet: '@media (max-width: 1047px)',
-      desktop: '@media (min-width: 1048px)',
-    };
+  - CSS Trick's [BEM 101](https://css-tricks.com/bem-101/)
+  - Harry Roberts' [introduction to BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/)
 
-    // good
-    const breakpoints = {
-      small: '@media (max-width: 639px)',
-      medium: '@media (max-width: 1047px)',
-      large: '@media (min-width: 1048px)',
-    };
-    ```
+We recommend a variant of BEM with PascalCased “blocks”, which works particularly well when combined with components (e.g. React). Underscores and dashes are still used for modifiers and children.
 
-## Ordering
+**Example**
 
-  - Define styles after the component.
+```jsx
+// ListingCard.jsx
+function ListingCard() {
+  return (
+    <article class="ListingCard ListingCard--featured">
 
-    > Why? We use a higher-order component to theme our styles, which is naturally used after the component definition. Passing the styles object directly to this function reduces indirection.
+      <h1 class="ListingCard__title">Adorable 2BR in the sunny Mission</h1>
 
-    ```jsx
-    // bad
-    const styles = {
-      container: {
-        display: 'inline-block',
-      },
-    };
+      <div class="ListingCard__content">
+        <p>Vestibulum id ligula porta felis euismod semper.</p>
+      </div>
 
-    function MyComponent({ styles }) {
-      return (
-        <div {...css(styles.container)}>
-          Never doubt that a small group of thoughtful, committed citizens can
-          change the world. Indeed, it’s the only thing that ever has.
-        </div>
-      );
-    }
+    </article>
+  );
+}
+```
 
-    export default withStyles(() => styles)(MyComponent);
+```css
+/* ListingCard.css */
+.ListingCard { }
+.ListingCard--featured { }
+.ListingCard__title { }
+.ListingCard__content { }
+```
 
-    // good
-    function MyComponent({ styles }) {
-      return (
-        <div {...css(styles.container)}>
-          Never doubt that a small group of thoughtful, committed citizens can
-          change the world. Indeed, it’s the only thing that ever has.
-        </div>
-      );
-    }
+  - `.ListingCard` is the “block” and represents the higher-level component
+  - `.ListingCard__title` is an “element” and represents a descendant of `.ListingCard` that helps compose the block as a whole.
+  - `.ListingCard--featured` is a “modifier” and represents a different state or variation on the `.ListingCard` block.
 
-    export default withStyles(() => ({
-      container: {
-        display: 'inline-block',
-      },
-    }))(MyComponent);
-    ```
+### ID selectors
 
-## Nesting
+While it is possible to select elements by ID in CSS, it should generally be considered an anti-pattern. ID selectors introduce an unnecessarily high level of [specificity](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) to your rule declarations, and they are not reusable.
 
-  - Leave a blank line between adjacent blocks at the same indentation level.
+For more on this subject, read [CSS Wizardry's article](http://csswizardry.com/2014/07/hacks-for-dealing-with-specificity/) on dealing with specificity.
 
-    > Why? The whitespace improves readability and reduces the likelihood of merge conflicts.
+### JavaScript hooks
 
-    ```js
-    // bad
-    {
-      bigBang: {
-        display: 'inline-block',
-        '::before': {
-          content: "''",
-        },
-      },
-      universe: {
-        border: 'none',
-      },
-    }
+Avoid binding to the same class in both your CSS and JavaScript. Conflating the two often leads to, at a minimum, time wasted during refactoring when a developer must cross-reference each class they are changing, and at its worst, developers being afraid to make changes for fear of breaking functionality.
 
-    // good
-    {
-      bigBang: {
-        display: 'inline-block',
+We recommend creating JavaScript-specific classes to bind to, prefixed with `.js-`:
 
-        '::before': {
-          content: "''",
-        },
-      },
+```html
+<button class="btn btn-primary js-request-to-book">Request to Book</button>
+```
 
-      universe: {
-        border: 'none',
-      },
-    }
-    ```
+### Border
 
----
+Use `0` instead of `none` to specify that a style has no border.
 
-CSS puns adapted from [Saijo George](http://saijogeorge.com/css-puns/).
+**Bad**
+
+```css
+.foo {
+  border: none;
+}
+```
+
+**Good**
+
+```css
+.foo {
+  border: 0;
+}
+```
+
+**[⬆ back to top](#table-of-contents)**
+
+## CSS Modules
+
+CSS modules is a great way to conflict free, local scoping for the styles that you write. We generally use it for projects that have a built in compile step.
+You can read more about it here <https://github.com/css-modules/css-modules>

@@ -1,4 +1,4 @@
-# Cisco Spark React/JSX Style Guide
+# Cisco Spark React/JSX Styleguide
 
 *A mostly reasonable approach to React and JSX*
 
