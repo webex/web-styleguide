@@ -78,8 +78,8 @@
 
 ## Naming
 
-  - **Extensions**: Use `.jsx` extension for React components.
-  - **Filename**: Use PascalCase for filenames. E.g., `ReservationCard.jsx`.
+  - **Extensions**: Use `.js` extension for React components.
+  - **Filename**: Use kebab-case for filenames. E.g., `reservation-cards.jsx`.
   - **Reference Naming**: Use PascalCase for React components and camelCase for their instances. eslint: [`react/jsx-pascal-case`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md)
 
     ```jsx
@@ -87,7 +87,7 @@
     import reservationCard from './ReservationCard';
 
     // good
-    import ReservationCard from './ReservationCard';
+    import ReservationCard from './reservation-card';
 
     // bad
     const ReservationItem = <ReservationCard />;
@@ -96,17 +96,17 @@
     const reservationItem = <ReservationCard />;
     ```
 
-  - **Component Naming**: Use the filename as the component name. For example, `ReservationCard.jsx` should have a reference name of `ReservationCard`. However, for root components of a directory, use `index.jsx` as the filename and use the directory name as the component name:
+  - **Component Naming**: Use the filename as the component name. For example, `reservation-card.jsx` should have a reference name of `ReservationCard`. However, for root components of a directory, use `index.js` as the filename and use the directory name as the component name:
 
     ```jsx
     // bad
-    import Footer from './Footer/Footer';
+    import Footer from './footer/footer';
 
     // bad
-    import Footer from './Footer/index';
+    import Footer from './footer/index';
 
     // good
-    import Footer from './Footer';
+    import Footer from './footer';
     ```
   - **Higher-order Component Naming**: Use a composite of the higher-order component's name and the passed-in component's name as the `displayName` on the generated component. For example, the higher-order component `withFoo()`, when passed a component `Bar` should produce a component with a `displayName` of `withFoo(Bar)`.
 
@@ -467,7 +467,8 @@
     }
     ```
 
-  - Bind event handlers for the render method in the constructor. eslint: [`react/jsx-no-bind`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
+  - Bind event handlers for the render method in the constructor. eslint: [`react/jsx-no-bind`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md).
+  Use the `autobind` decorator to bind your event handlers.
 
     > Why? A bind call in the render path creates a brand new function on every single render.
 
@@ -484,13 +485,10 @@
     }
 
     // good
+    import autobind from 'autobind';
+
     class extends React.Component {
-      constructor(props) {
-        super(props);
-
-        this.onClickDiv = this.onClickDiv.bind(this);
-      }
-
+      @autobind
       onClickDiv() {
         // do stuff
       }

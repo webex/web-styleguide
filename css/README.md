@@ -1,6 +1,6 @@
 # Cisco Spark CSS Style Guide
 
-*A mostly reasonable approach to CSS-in-JavaScript
+*A mostly reasonable approach to CSS
 
 ## Table of Contents
 
