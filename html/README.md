@@ -1,6 +1,6 @@
 # Cisco Spark <HTML> Styleguide
 
-*A mostly reasonable approach to HTML adapted from a [@mdo](http://codeguide.co/)*
+*A mostly reasonable approach to HTML adapted from @mdo's well researched [code guide](http://codeguide.co/)*
 
 > Note: This HTML guide should only be used for pure html files, not for projects using compiled markup such as JSX
 
