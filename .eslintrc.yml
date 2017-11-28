@@ -1,0 +1,5 @@
+extends:
+  - "./packages/node_modules/@ciscospark/eslint-config-base/index.js"
+env:
+  browser: true
+root: true
