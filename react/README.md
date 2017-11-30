@@ -19,7 +19,7 @@
   1. [Methods](#methods)
   1. [Ordering](#ordering)
   1. [`isMounted`](#ismounted)
-
+  1. [`render`](#render)
 ## Basic Rules
 
   - Only include one React component per file.
@@ -618,5 +618,55 @@
   > Why? [`isMounted` is an anti-pattern][anti-pattern], is not available when using ES6 classes, and is on its way to being officially deprecated.
 
   [anti-pattern]: https://facebook.github.io/react/blog/2015/12/16/ismounted-antipattern.html
+
+**[⬆ back to top](#table-of-contents)**
+
+## `render`
+
+  - Limit as much logic as you can in the render lifecycle method. If you can, use a [selector](https://github.com/reactjs/reselect) to generate the data you need for your views.
+
+  > Why? The render method is called on every state change, and any logic contained there has to be computed. Placing render logic inside a selector allows that to be memoized and increases performance.
+
+  - Conditional rendering is a common pattern. Here are the 2 common patterns we use adopted from the [react docs]
+  (https://reactjs.org/docs/conditional-rendering.html):
+
+    - Inline If logic with && operator
+
+    ``` js
+    function SomePresentationalComponent({isImportant}) {
+      return (
+        <div>
+          <h1>Hello!</h1>
+          {
+            isImportant &&
+            <h2>
+              You are Important!
+            </h2>
+          }
+        </div>
+      );
+    }
+    ```
+
+    - Element variables
+
+    ``` js
+    function SomePresentationalComponent({isImportant}) {
+      let button;
+      if (isImportant) {
+        button = <Button>You're Important</Button>;
+      }
+      else {
+        button = <a>Make yourself important</a>;
+      }
+      return (
+        <div>
+          <h1>Hello!</h1>
+          {button}
+        </div>
+      );
+    }
+    ```
+
 
 **[⬆ back to top](#table-of-contents)**
