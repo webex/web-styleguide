@@ -9,6 +9,8 @@
   - [CSS](css/)
   - [Javascript](javascript/)
   - [React](react/)
+  - [Linters](linters/)
+  - [Tools](tools/)
 
 ## Overview
 
