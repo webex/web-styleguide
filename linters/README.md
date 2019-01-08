@@ -13,13 +13,13 @@ In order to utilize the linters provided by this repo, you can use the following
 >The pluggable linting utility for JavaScript and JSX
 
 ```bash
-npm install --save-dev eslint eslint-plugin-import @ciscospark/eslint-config-base
+npm install --save-dev eslint eslint-plugin-import @webex/eslint-config-base
 ```
 
 **For Projects Using React**
 
 ```bash
-npm install --save-dev eslint-plugin-react eslint-plugin-jsx-a11y @ciscospark/eslint-config-react
+npm install --save-dev eslint-plugin-react eslint-plugin-jsx-a11y @webex/eslint-config-react
 ```
 
 ### ESLint Base Config
