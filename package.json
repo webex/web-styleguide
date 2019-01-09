@@ -1,6 +1,6 @@
 {
   "name": "@ciscospark/web-styleguide",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "A somewhat reasonable approach to developing for the web.",
   "scripts": {
     "build": "./scripts/index.js",
