@@ -6,9 +6,15 @@ Any react project with more than a basic state should be using [Redux](https://r
 
 > Redux is a predictable state container for JavaScript apps.
 
-Redux maintains the entire application state in the forms of different data stores. Since Redux stores are kept in users' browser memory, there should be mindfulness of the total usage of data. Individual data stores should be thought of as a tables in a relational database, normalizing data so that it isn't repeated thoughout multiple stores.
+Redux maintains the entire application state in a singular store.
 
-A redux store (or module) contains actions, reducers and, optionally, selectors. Some stores are simple enough that they can be contained in one `index.js` file. Once complexity has risen, the following file formats should happen:
+## Redux Modules
+
+Once our singular store model exceeds basic complexity, we need to split code into different speciality areas called "modules".
+
+When designing a module, there should be mindfulness of the total usage of data since the Redux store is kept in users' browser memory. Individual redux modules should be thought of as a tables in a relational database, normalizing data so that it isn't repeated thoughout multiple modules.
+
+A redux module contains actions, reducers and, optionally, selectors. Some stores are simple enough that they can be contained in one `index.js` file. Once complexity has risen, the following file formats should happen:
 
 ```sh
 my-redux-module/
@@ -16,9 +22,13 @@ my-redux-module/
   index.js
   reducer.js
   selectors.js
+  [constants.js]
+  [helpers.js]
 ```
 
 ## Actions
+
+Actions are plain objects describing what happened in the app, and serve as the sole way to describe an intention to mutate the data.
 
 ### Action Names
 
@@ -62,6 +72,43 @@ The shape of the object returned from the function should be the same for all ac
   }
   ```
 
+### Async Middleware (Thunks)
+
+> Thunks are the recommended middleware for basic Redux side effects logic, including complex synchronous logic that needs access to the store, and simple async logic like AJAX requests. [ref](https://github.com/reduxjs/redux-thunk#why-do-i-need-this)
+
+When an action is expected to reach out to a service to fetch data or use values from the existing store, we use a middleware called [Redux Thunks](https://github.com/reduxjs/redux-thunk).
+
+### Action Creators
+
+> Redux Thunk middleware allows you to write action creators that return a function instead of an action. The thunk can be used to delay the dispatch of an action, or to dispatch only if a certain condition is met. The inner function receives the store methods dispatch and getState as parameters.
+
+A complex example of getting an avatar either by existing store or fetching it new:
+
+```js
+function fetchAvatar({space, userId}, spark) {
+  return (dispatch, getState) => {
+    const {avatar} = getState();
+    const avatarId = space ? space.id : userId;
+    const hasFetched = avatar.hasIn(['items', avatarId]);
+    const isFetching = avatar.hasIn(['avatarsInFlight', avatarId]);
+
+    if (hasFetched) {
+      return Promise.resolve(avatar.getIn(['items', avatarId]));
+    }
+
+    if (isFetching) {
+      return Promise.resolve();
+    }
+
+    if (space) {
+      return dispatch(fetchSpaceAvatar(space, spark, userId));
+    }
+
+    return dispatch(fetchUserAvatar(userId, spark));
+  };
+}
+```
+
 ## Reducers
 
 ### Initial State
@@ -91,3 +138,8 @@ A very powerful utility to assist your redux debugging is the [Devtools for Redu
 ## Inspiration
 
 A huge inspiration for this style was from the ["Ducks: Redux Reducer Bundles"](https://github.com/erikras/ducks-modular-redux) project!
+
+## References
+
+- [Speeding up Product Development with Redux Modules](https://www.smartly.io/blog/speeding-up-product-development-with-redux-modules)
+- [Thunks in Redux](https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60)
