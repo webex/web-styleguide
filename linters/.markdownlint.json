@@ -95,7 +95,7 @@
 
   "comment": "MD029: Ordered list item prefix",
   "ol-prefix": {
-    "style": "one"
+    "style": "one_or_ordered"
   },
 
   "comment": "MD030: Spaces after list markers",
